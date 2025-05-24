@@ -61,7 +61,6 @@ public class JwtUtils {
     }
 
     public boolean validateToken(String authToken){
-        logger.info(authToken);
         try{
         Jwts.parser().verifyWith((SecretKey) key())
                 .build().parseSignedClaims(authToken);
