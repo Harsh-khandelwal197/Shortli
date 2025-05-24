@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 
 @Component
 public class JwtUtils {
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+
 
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -58,6 +60,7 @@ public class JwtUtils {
     }
 
     public boolean validateToken(String authToken){
+        logger.info(authToken);
         try{
         Jwts.parser().verifyWith((SecretKey) key())
                 .build().parseSignedClaims(authToken);
