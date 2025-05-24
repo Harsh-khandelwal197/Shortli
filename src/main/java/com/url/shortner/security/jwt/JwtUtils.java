@@ -13,6 +13,8 @@ import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class JwtUtils {
@@ -21,7 +23,7 @@ public class JwtUtils {
     private String jwtSecret;
 
     @Value(("${jwt.expiration}"))
-    private String jwtExpirationMs;
+    private long jwtExpirationMs;
 
     public String getJwtFromHeader(HttpServletRequest request){
         String bearerToken = request.getHeader("Authorization");
@@ -30,21 +32,23 @@ public class JwtUtils {
         }
         return null;
     }
+
     public String generateToken(UserDetailsImpl userDetails) {
         String username = userDetails.getUsername();
         String roles = userDetails.getAuthorities().stream()
-                .map(authorities -> authorities.getAuthority())
+                .map(authority -> authority.getAuthority())
                 .collect(Collectors.joining(","));
-
         return Jwts.builder()
                 .subject(username)
                 .claim("roles", roles)
                 .issuedAt(new Date())
-                .expiration(new Date(new Date().getTime() + jwtExpirationMs))
+                .expiration(new Date((new Date().getTime() + jwtExpirationMs)))
                 .signWith(key())
                 .compact();
-
     }
+
+
+
 
     public String getUserNameFromJwtToken(String token){
         return Jwts.parser()
