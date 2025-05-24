@@ -40,7 +40,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if(jwt != null && jwtTokenProvider.validateToken(jwt)){
                 // Get Username -> Load User -> set the auth context
                 String username = jwtTokenProvider.getUserNameFromJwtToken(jwt);
-                logger.info("Username: "+ username);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 logger.info(userDetails);
                 if(userDetails != null){

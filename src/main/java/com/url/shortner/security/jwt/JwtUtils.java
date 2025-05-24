@@ -37,6 +37,7 @@ public class JwtUtils {
 
     public String generateToken(UserDetailsImpl userDetails) {
         String username = userDetails.getUsername();
+        logger.info("username: "+ username);
         String roles = userDetails.getAuthorities().stream()
                 .map(authority -> authority.getAuthority())
                 .collect(Collectors.joining(","));
